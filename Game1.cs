@@ -17,6 +17,14 @@ namespace pong_csharp
         Ball ball;
 
         SoundEffect soundEffect;
+        SpriteFont font;
+
+        // Score position;
+        Vector2 scoreLeftPosition;
+        Vector2 scoreRightPosition;
+
+        int scoreLeft = 0;
+        int scoreRight = 0;
 
         public Game1()
         {
@@ -34,10 +42,16 @@ namespace pong_csharp
             
             float centerHeight = _graphics.PreferredBackBufferHeight / 2;
             float centerWidth = _graphics.PreferredBackBufferWidth / 2;
-            
+
+            // Paddles    
             paddleLeft = new Paddle(this, "paddle", new Vector2(16, centerHeight - 64));
             paddleRight = new Paddle(this, "paddle", new Vector2(_graphics.PreferredBackBufferWidth - 32, centerHeight - 64));
 
+            // Score
+            scoreLeftPosition = new Vector2(centerWidth - 128, 32);
+            scoreRightPosition = new Vector2(centerWidth + 128, 32);
+
+            // Ball
             ball = new Ball(this, "ball", new Vector2(centerWidth - 8, centerHeight));
             ball.changeDirection(new Vector2(1, 0));
             base.Initialize();
@@ -47,6 +61,7 @@ namespace pong_csharp
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             soundEffect = Content.Load<SoundEffect>("hit_ball");
+            font = Content.Load<SpriteFont>("fontGame");
         }
 
         // Move the given paddle and prevent that exceed the screen limits
@@ -90,11 +105,16 @@ namespace pong_csharp
             }
 
             // Reset ball position
-            if (ball.position.X < 0)
+            if (ball.position.X < 0) {
+                scoreRight++;
                 ball.resetBall();
-            if (ball.position.X > _graphics.PreferredBackBufferWidth)
+            }
+            if (ball.position.X > _graphics.PreferredBackBufferWidth) {
+                scoreLeft++;
                 ball.resetBall();
+            }
 
+            // Paddle right collision
             if (isColliding(ball.getRect(), paddleRight.getRect())) {
                 var pos = Math.Floor(ball.position.Y - paddleRight.position.Y);
                 if (pos >= 0 && pos <= 39)
@@ -107,6 +127,7 @@ namespace pong_csharp
                 ball.updateSpeed();
             }
 
+            // Paddle left collision
             if (isColliding(ball.getRect(), paddleLeft.getRect())) {
                 var pos = Math.Floor(ball.position.Y - paddleLeft.position.Y);
                 if (pos >= 0 && pos <= 39)
@@ -129,6 +150,10 @@ namespace pong_csharp
             paddleLeft.Draw(_spriteBatch);
             paddleRight.Draw(_spriteBatch);
             ball.Draw(_spriteBatch);
+            // Draw Score
+            _spriteBatch.DrawString(font, scoreLeft.ToString(), scoreLeftPosition, Color.White);
+            _spriteBatch.DrawString(font, scoreRight.ToString(), scoreRightPosition, Color.White);
+            
             _spriteBatch.End();
             base.Draw(gameTime);
         }

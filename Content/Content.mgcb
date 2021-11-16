@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:ball.png
 
+#begin hit_ball.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:hit_ball.wav
+
 #begin paddle.png
 /importer:TextureImporter
 /processor:TextureProcessor

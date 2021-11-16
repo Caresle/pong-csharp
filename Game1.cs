@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace pong_csharp
@@ -14,6 +15,8 @@ namespace pong_csharp
         Paddle paddleRight;
 
         Ball ball;
+
+        SoundEffect soundEffect;
 
         public Game1()
         {
@@ -40,6 +43,7 @@ namespace pong_csharp
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            soundEffect = Content.Load<SoundEffect>("hit_ball");
         }
 
         // Move the given paddle and prevent that exceed the screen limits
@@ -71,10 +75,14 @@ namespace pong_csharp
 
             ball.Move(gameTime);
             // collision with screen
-            if (ball.position.Y <= 0)
+            if (ball.position.Y <= 0) {
+                soundEffect.Play();
                 ball.speedY *= -1;
-            if (ball.position.Y + ball.texture.Height >= _graphics.PreferredBackBufferHeight)
+            }
+            if (ball.position.Y + ball.texture.Height >= _graphics.PreferredBackBufferHeight) {
+                soundEffect.Play();
                 ball.speedY *= -1;
+            }
 
             // Reset ball position
             if (ball.position.X < 0)
@@ -90,6 +98,7 @@ namespace pong_csharp
                     ball.changeDirection(new Vector2(-1, 0));
                 if (pos >= 65 && pos <= 128)
                     ball.changeDirection(new Vector2(-1, 1));
+                soundEffect.Play();
             }
 
             if (isColliding(ball.getRect(), paddleLeft.getRect())) {
@@ -100,6 +109,7 @@ namespace pong_csharp
                     ball.changeDirection(new Vector2(1, 0));
                 if (pos >= 65 && pos <= 128)
                     ball.changeDirection(new Vector2(1));
+                soundEffect.Play();
             }
             base.Update(gameTime);
         }

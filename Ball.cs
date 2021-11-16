@@ -8,6 +8,7 @@ public class Ball {
 	private Vector2 originalPosition;
 	
 	public static float speed = 250f;
+	public static float initialSpeed = 250f;
 	public float speedX = speed;
 	public float speedY = speed;
 
@@ -36,13 +37,21 @@ public class Ball {
 		this.speedY = speed * direction.Y; 
 	}
 
+	public void updateSpeed() {
+		speed += 50f;
+	}
+
 	public void Move(GameTime gameTime) {
 		this.position.Y += this.speedY * (float)gameTime.ElapsedGameTime.TotalSeconds;
 		this.position.X += this.speedX * (float)gameTime.ElapsedGameTime.TotalSeconds;
 	}
 
 	public void resetBall() {
+		speed = initialSpeed;
+		this.speedX = initialSpeed;
+		this.speedY = initialSpeed;
 		this.position = this.originalPosition;
+		
 	}
 
 	public Vector4 getRect() {

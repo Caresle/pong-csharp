@@ -27,11 +27,14 @@ namespace pong_csharp
 
         protected override void Initialize()
         {
+            //Change the screen resolution
             _graphics.PreferredBackBufferWidth = 858;
             _graphics.PreferredBackBufferHeight = 525;
             _graphics.ApplyChanges();
+            
             float centerHeight = _graphics.PreferredBackBufferHeight / 2;
             float centerWidth = _graphics.PreferredBackBufferWidth / 2;
+            
             paddleLeft = new Paddle(this, "paddle", new Vector2(16, centerHeight - 64));
             paddleRight = new Paddle(this, "paddle", new Vector2(_graphics.PreferredBackBufferWidth - 32, centerHeight - 64));
 
@@ -77,10 +80,12 @@ namespace pong_csharp
             // collision with screen
             if (ball.position.Y <= 0) {
                 soundEffect.Play();
+                ball.updateSpeed();
                 ball.speedY *= -1;
             }
             if (ball.position.Y + ball.texture.Height >= _graphics.PreferredBackBufferHeight) {
                 soundEffect.Play();
+                ball.updateSpeed();
                 ball.speedY *= -1;
             }
 
@@ -99,6 +104,7 @@ namespace pong_csharp
                 if (pos >= 65 && pos <= 128)
                     ball.changeDirection(new Vector2(-1, 1));
                 soundEffect.Play();
+                ball.updateSpeed();
             }
 
             if (isColliding(ball.getRect(), paddleLeft.getRect())) {
@@ -110,6 +116,7 @@ namespace pong_csharp
                 if (pos >= 65 && pos <= 128)
                     ball.changeDirection(new Vector2(1));
                 soundEffect.Play();
+                ball.updateSpeed();
             }
             base.Update(gameTime);
         }

@@ -25,4 +25,8 @@ public class Paddle {
 			0f
 		);
 	}
+
+	public Vector4 getRect() {
+		return new Vector4(this.position.X, this.position.Y, this.texture.Width, this.texture.Height);
+	}
 }
